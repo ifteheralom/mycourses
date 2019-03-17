@@ -4,7 +4,12 @@ Course management website using Java Servlet
 # To run a test
 1. Install mysql server `sudo apt-get install mysql-server` with user as "root" and password as "333".
 2. Install mysql workbench `sudo apt-get install mysql-workbench`
-3. Create tables:
+3. create database: 
+```
+CREATE DATABASE coursesdb;
+USE coursesdb;
+```
+4. Create tables:
 ```
 CREATE TABLE users(
 user_name, varchar(45),
@@ -30,5 +35,5 @@ st_name, varchar(45),
 course_id, varchar(45));
 ```
 
-4. Create some dummy users in `users` table
-5. Run the project using Tomcat server using Eclipse.
+5. Create some dummy users in `users` table
+6. Run the project using Tomcat server using Eclipse.
