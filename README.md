@@ -36,4 +36,4 @@ course_id, varchar(45));
 ```
 
 5. Create some dummy users in `users` table
-6. Run the project using Tomcat server using Eclipse.
+6. Run the project on Tomcat server using Eclipse.
