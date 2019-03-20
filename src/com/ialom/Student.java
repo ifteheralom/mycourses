@@ -52,6 +52,7 @@ public class Student extends HttpServlet {
 		// response.getWriter().append("Served at: ").append(request.getContextPath());
 		Connection conn = null;
 		
+		// Get the session parameters for a user
 		String user_id = (String)request.getSession(false).getAttribute("userId");
 		String user_name = (String)request.getSession(false).getAttribute("userName");
 		String full_name = (String)request.getSession(false).getAttribute("fullName");
@@ -63,22 +64,25 @@ public class Student extends HttpServlet {
 			// Open a connection
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-			// Execute SQL query
+			// Statement instance that will Execute SQL query
 			Statement stmt = conn.createStatement();
 			String sql;
 
+			// Ge the courses that the user/student has enrolled
 			sql = "SELECT *  FROM enroll where user_name='" + user_name + "';";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			List<String[]> courseData = new ArrayList<String[]>();
 			
+			// Collect the result in a list of arrays
 			while (rs.next()) {
 				String ara[] = {rs.getString(1), rs.getString(2), rs.getString(3)};
 				courseData.add(ara);
 			}
 			rs.close();
 			conn.close();
-			//System.out.println(user_id + user_name + full_name + "st");
+			
+			// Pass the list to the jsp page
 			request.setAttribute("userid", user_id);
 			request.setAttribute("username", user_name);
 			request.setAttribute("fullname", full_name);

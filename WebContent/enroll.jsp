@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 
-<title>Insert title here</title>
+<title>Enroll</title>
 
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -27,7 +27,7 @@
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-		<a class="navbar-brand" href="#">MyCourses</a>
+		<a class="navbar-brand" href="http://localhost:8080/mycourses/Login">MyCourses</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
 			aria-expanded="false" aria-label="Toggle navigation">

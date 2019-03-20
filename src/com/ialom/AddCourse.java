@@ -60,14 +60,16 @@ public class AddCourse extends HttpServlet {
 			// Open a connection
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-			// Execute SQL query
+			// Statement instance that will Execute SQL query
 			Statement stmt = conn.createStatement();
 			String sql;
 
+			// get parameters from the add course form
 			String id = request.getParameter("courseId");
 			String name = request.getParameter("courseName");
 			String teacher = request.getParameter("courseTeacher");
 
+			// insert the data into the database
 			sql = "INSERT  INTO courses VALUES ('" + id + "','" + name + "','" + teacher + "');";
 			stmt.executeUpdate(sql);
 			conn.close();

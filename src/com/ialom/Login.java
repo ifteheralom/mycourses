@@ -66,26 +66,31 @@ public class Login extends HttpServlet {
 			// Open a connection
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-			// Execute SQL query
+			// Statement instance that will submit the sql query
 			Statement stmt = conn.createStatement();
 			String sql;
 
+			// Fetch username and password from the form
 			String username = request.getParameter("username");
 			String password = request.getParameter("password");
 			
+			// query the dataabase for user credentials
 			sql = "SELECT *  FROM users WHERE user_name='" + username + "' AND pass_word='" + password + "';";
 			ResultSet rs = stmt.executeQuery(sql);
 			
 			if (!rs.next()) {
+				// if the credentials are incorrect return an error message
 				request.setAttribute("errorMessage", "Incorrect username or password");
 				request.getRequestDispatcher("login.jsp").forward(request, response);
 				//response.sendRedirect("/mycourses/Login");
 			} else {
+				// user credentials were correct set parameters that will be required for the session
 				HttpSession session = request.getSession(true);
 				session.setAttribute("userName", username);
 				session.setAttribute("fullName", rs.getString("full_name"));
 				session.setAttribute("userId", rs.getString("user_id"));
 				
+				// redirect to user specific pages
 				switch(rs.getString("type")) {
 					case "admin": {
 						response.sendRedirect("/mycourses/Admin");
@@ -109,7 +114,6 @@ public class Login extends HttpServlet {
 			try {
 				conn.close();
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}		

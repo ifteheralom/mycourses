@@ -10,9 +10,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.eclipse.jdt.internal.compiler.ast.ArrayAllocationExpression;
+
+import com.sun.xml.internal.fastinfoset.algorithm.IntEncodingAlgorithm;
 
 import java.sql.DriverManager;
 import java.sql.Connection;
@@ -21,10 +22,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 /**
- * Servlet implementation class Enrollments
+ * Servlet implementation class Attendance
  */
-@WebServlet("/Enrollments")
-public class Enrollments extends HttpServlet {
+@WebServlet("/Attendance")
+public class Attendance extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	// JDBC driver name and database URL
 	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
@@ -37,7 +38,7 @@ public class Enrollments extends HttpServlet {
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public Enrollments() {
+	public Attendance() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -49,57 +50,7 @@ public class Enrollments extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		// response.getWriter().append("Served at: ").append(request.getContextPath());
-		Connection conn = null;
-
-		try {
-			// Register JDBC driver
-			Class.forName("com.mysql.cj.jdbc.Driver");
-
-			// Open a connection
-			conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-			// Statement instance that will Execute SQL query
-			Statement stmt = conn.createStatement();
-			String sql;
-			
-			// Get the selected course id
-			String courseId = request.getParameter("courseId");
-			
-			// Set the course id as a session parameter
-			if(courseId != null) {
-				HttpSession session = request.getSession(true);
-				session.setAttribute("courseId", courseId);
-			}else {
-				// Course id was null, i,e the page was redirected
-				// Get the course id from the session parameters
-				courseId = (String)request.getSession(false).getAttribute("courseId");
-			}
-
-			// Fetch the enrolled student list from  the database
-			sql = "SELECT *  FROM enrollments WHERE course_id='" + courseId + "';";
-			ResultSet rs = stmt.executeQuery(sql);
-
-			List<String[]> courseData = new ArrayList<String[]>();
-
-			// Collect the result in a list of arrays
-			while (rs.next()) {
-				String ara[] = {rs.getString(1), rs.getString(2), rs.getString(3), rs.getString(4), rs.getString(5)};
-				courseData.add(ara);
-			}
-			rs.close();
-			conn.close();
-			
-			// Pass the list to the jsp page
-
-			request.setAttribute("courseId", courseId);
-			request.setAttribute("courses", courseData);
-			request.getRequestDispatcher("/enrollments.jsp").forward(request, response);
-
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println(e.toString());
-		}
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -109,7 +60,45 @@ public class Enrollments extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doGet(request, response);
+		// doGet(request, response);
+		Connection conn = null;
+
+		try {
+			// Register JDBC driver
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			// Open a connection
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+			//Statement instance that will Execute SQL query
+			Statement stmt = conn.createStatement();
+			String sql;
+			
+			// Get the selected course id and student id
+			String courseId = request.getParameter("courseId");
+			String studentId = request.getParameter("stId");
+
+			// Fetch the available attendance count from the database
+			sql = "SELECT attendance  FROM enrollments WHERE course_id='" + courseId + "' AND st_id='" + studentId + "';";
+			ResultSet rs = stmt.executeQuery(sql);
+			
+			if(rs.next()) {
+				// Increase the attendance by 1
+				int attendanceCount = Integer.parseInt(rs.getString("attendance"));
+				++attendanceCount;
+				// Set the new attendance in the database
+				sql = "UPDATE enrollments set attendance=" + attendanceCount + ", marked='marked' WHERE (course_id='" + courseId + "' AND st_id='" + studentId + "');";
+				stmt.executeUpdate(sql);
+			}
+			
+			rs.close();
+			conn.close();
+			response.sendRedirect("/mycourses/Enrollments");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e.toString());
+		}
 	}
 
 }

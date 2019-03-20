@@ -64,14 +64,23 @@ public class RemoveCourse extends HttpServlet {
 			// Open a connection
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-			// Execute SQL query
+			//Statement instance that will Execute SQL query
 			Statement stmt = conn.createStatement();
 			String sql;
 
+			// Get the selected course id
 			String id = request.getParameter("id");
 
+			// Delete the course from the database
 			sql = "DELETE  FROM courses WHERE course_id='" + id + "';";
 			stmt.executeUpdate(sql);
+			
+			sql = "DELETE  FROM enroll WHERE course_id='" + id + "';";
+			stmt.executeUpdate(sql);
+			
+			sql = "DELETE  FROM enrollments WHERE course_id='" + id + "';";
+			stmt.executeUpdate(sql);
+			
 			conn.close();
 			response.sendRedirect("/mycourses/Admin");
 

@@ -50,6 +50,8 @@ public class Enroll extends HttpServlet {
 		// TODO Auto-generated method stub
 		// response.getWriter().append("Served at: ").append(request.getContextPath());
 		Connection conn = null;
+		
+		// Get the user parameters from the session
 		String user_id = (String)request.getSession(false).getAttribute("userId");
 		String user_name = (String)request.getSession(false).getAttribute("userName");
 		String full_name = (String)request.getSession(false).getAttribute("fullName");
@@ -62,15 +64,17 @@ public class Enroll extends HttpServlet {
 			// Open a connection
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-			// Execute SQL query
+			// Statement instance that will Execute SQL query
 			Statement stmt = conn.createStatement();
 			String sql;
 
+			// Get the list of available courses
 			sql = "SELECT *  FROM courses;";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			List<String[]> courseData = new ArrayList<String[]>();
 			
+			// Collect the result in a list of arrays
 			while (rs.next()) {
 				String ara[] = {rs.getString(1), rs.getString(2), rs.getString(3)};
 				courseData.add(ara);
@@ -78,6 +82,7 @@ public class Enroll extends HttpServlet {
 			rs.close();
 			conn.close();
 
+			// Pass the result to the jsp page
 			request.setAttribute("fullname", full_name);
 			request.setAttribute("userid", user_id);
 			request.setAttribute("username", user_name);

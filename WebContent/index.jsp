@@ -1,12 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 
-<title>Enrollments</title>
+<title>MyCourses Welcome</title>
 
 <link rel="stylesheet"
 	href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -35,45 +34,40 @@
 		</button>
 		<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
 			<div class="navbar-nav mr-auto"></div>
-			<div class="navbar-nav ml-auto">
-				<form class="form-inline" method="post" action="EnrollFwd">
-					<input type="hidden" name="courseId" value="<c:out value="${courseId}"></c:out>">
-					<button type="submit" class="btn btn-info">Back to MyCourses</button>
-				</form>
-			</div>
+			<div class="navbar-nav ml-auto"></div>
 		</div>
 	</nav>
-	<br>
+	<div class="jumbotron jumbotron-fluid">
+		<div class="container">
+			<h1 class="display-4">Welcome to MyCourses Web Portal</h1>
+			<p class="lead">
+				Please Login from <a href="http://localhost:8080/mycourses/Login">here</a>
+				or contact the administrator for your account credentials
+			</p>
+		</div>
+	</div>
 	<div class="container">
-		<table class="table table-striped table-bordered">
-			<thead>
-				<tr>
-					<th scope="col">Student ID</th>
-					<th scope="col">Student Name</th>
-					<th scope="col">Course ID</th>
-					<th scope="col">Attendance</th>
-					<th scope="col">Actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				<c:forEach items="${requestScope.courses}" var="i">
-					<tr>
-						<td>${i[0]}</td>
-						<td>${i[1]}</td>
-						<td>${i[2]}</td>
-						<td>${i[3]} ${i[4]}</td>
-						<td display="inline">
-							<form class="form-inline" method="post" action="Attendance">
-								<input type="hidden" name="stId" value="${i[0]}"> <input
-									type="hidden" name="courseId" value="${i[2]}">
-								<button type="submit" class="btn btn-outline-success btn-sm">Present</button>
-							</form>
-						</td>
-					</tr>
-				</c:forEach>
-			</tbody>
-		</table>
+		<div class="row">
+			<div class="col-md-6"></div>
+			<div class="col-md-6"></div>
+		</div>
 	</div>
 
+	<style>
+.footer {
+	position: absolute;
+	left: 0;
+	bottom: 0;
+	width: 100%;
+	background-color: #1c1e21;
+	color: white;
+	text-align: center;
+}
+</style>
+	<div class="footer">
+		<br>
+		<p>Designed and developed by Ifteher Alom and Md Ahsan Uddin
+			Shatil</p>
+	</div>
 </body>
 </html>

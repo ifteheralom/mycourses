@@ -62,6 +62,7 @@ public class EnrollCourse extends HttpServlet {
 		// doGet(request, response);
 		Connection conn = null;
 
+		// Get the user parameters from the session
 		String user_id = (String)request.getSession(false).getAttribute("userId");
 		String user_name = (String)request.getSession(false).getAttribute("userName");
 		String full_name = (String)request.getSession(false).getAttribute("fullName");
@@ -73,22 +74,29 @@ public class EnrollCourse extends HttpServlet {
 			// Open a connection
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-			// Execute SQL query
+			// Statement instance that will Execute SQL query
 			Statement stmt = conn.createStatement();
 			String sql;
 
+			// Get the selected course parameters
 			String id = request.getParameter("courseId");
 			String name = request.getParameter("courseName");
 			String teacher = request.getParameter("courseTeacher");
-			// System.out.println(user_id + user_name+ full_name);
 			
-			sql = "INSERT  INTO enroll VALUES ('" + id + "','" + name + "','" + teacher + "','" + user_name + "');";
-			stmt.executeUpdate(sql);
+			// Check if the student is already enrolled for this course
+			sql = "SELECT * FROM enroll WHERE (user_name='" + user_name + "' and course_id='" + id + "');";
+			ResultSet rs = stmt.executeQuery(sql);
 			
-			String st_id = "2015331061";
-			String st_name = "Ifteher Alom";
-			sql = "INSERT  INTO enrollments VALUES ('" + user_id + "','" + full_name + "','" + id + "');";
-			stmt.executeUpdate(sql);
+			// If the user has not enrolled for this course
+			if(!rs.next()) {
+				// add the course in the database under the students enrolled courses
+				sql = "INSERT  INTO enroll VALUES ('" + id + "','" + name + "','" + teacher + "','" + user_name + "');";
+				stmt.executeUpdate(sql);
+				
+				// add the students details in the course enrollments for the teacher
+				sql = "INSERT  INTO enrollments VALUES ('" + user_id + "','" + full_name + "','" + id + "', 0, null);";
+				stmt.executeUpdate(sql);
+			}
 			
 			conn.close();
 			response.sendRedirect("/mycourses/Student");

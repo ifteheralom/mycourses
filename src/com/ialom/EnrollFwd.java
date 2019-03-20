@@ -1,11 +1,23 @@
 package com.ialom;
 
+import java.io.*;
+import java.util.*;
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.eclipse.jdt.internal.compiler.ast.ArrayAllocationExpression;
+
+import java.sql.DriverManager;
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Servlet implementation class EnrollFwd
@@ -13,34 +25,69 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet("/EnrollFwd")
 public class EnrollFwd extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-       
-    /**
-     * @see HttpServlet#HttpServlet()
-     */
-    public EnrollFwd() {
-        super();
-        // TODO Auto-generated constructor stub
-    }
+
+	// JDBC driver name and database URL
+	static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";
+	static final String DB_URL = "jdbc:mysql://localhost:3306/coursesdb";
+
+	// Database credentials
+	static final String USER = "root";
+	static final String PASS = "333";
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#HttpServlet()
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	public EnrollFwd() {
+		super();
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
+	 *      response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
+	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		// doGet(request, response);
-		// System.out.println("Hello"+ request.getParameter("userName") + request.getParameter("fullName") + request.getParameter("userId"));
-		request.setAttribute("fullname", request.getParameter("fullName"));
-		request.setAttribute("username", request.getParameter("userName"));
-		request.setAttribute("userid", request.getParameter("userId"));
-		request.getRequestDispatcher("/Enroll").forward(request, response);
+		Connection conn = null;
+
+		try {
+			// Register JDBC driver
+			Class.forName("com.mysql.cj.jdbc.Driver");
+
+			// Open a connection
+			conn = DriverManager.getConnection(DB_URL, USER, PASS);
+
+			// Statement instance that will submit sql queries
+			Statement stmt = conn.createStatement();
+			String sql;
+			
+			// Get the course ID
+			String courseId = request.getParameter("courseId");
+			
+			// Fetch all available courses from the databasse
+			sql = "UPDATE enrollments set marked=null WHERE course_id='" + courseId + "';";
+			stmt.executeUpdate(sql);
+
+			conn.close();
+			
+			response.sendRedirect("/mycourses/Teacher");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e.toString());
+		}
 	}
 
 }

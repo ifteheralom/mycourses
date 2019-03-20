@@ -64,15 +64,17 @@ public class Admin extends HttpServlet {
 			// Open a connection
 			conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-			// Execute SQL query
+			// Statement instance that will submit sql queries
 			Statement stmt = conn.createStatement();
 			String sql;
-
+			
+			// Fetch all available courses from the databasse
 			sql = "SELECT *  FROM courses;";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			List<String[]> courseData = new ArrayList<String[]>();
 			
+			// collect all the results in a list of arrays
 			while (rs.next()) {
 				String ara[] = {rs.getString(1), rs.getString(2), rs.getString(3)};
 				courseData.add(ara);
@@ -80,6 +82,7 @@ public class Admin extends HttpServlet {
 			rs.close();
 			conn.close();
 			
+			// pass the data to the jsp page
 			request.setAttribute("username", user_name);
 			request.setAttribute("fullname", full_name);
 			request.setAttribute("courses", courseData);

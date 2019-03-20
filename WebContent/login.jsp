@@ -25,48 +25,47 @@
 
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">MyCourses</a>
-  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-    <div class="navbar-nav mr-auto" >
-      <a class="nav-item nav-link" href="http://localhost:8080/mycourses/Student">Student</a>
-      <a class="nav-item nav-link" href="http://localhost:8080/mycourses/Teacher">Teacher</a>
-      <a class="nav-item nav-link" href="http://localhost:8080/mycourses/Admin">Admin</a>
-    </div>
-    
-    <div class="navbar-nav ml-auto" >
-      <a class="nav-item nav-link" href="#">Register</a>
-      <a class="nav-item nav-link active" href="http://localhost:8080/mycourses/login.jsp">Login</a>
-    </div>
-  </div>
-</nav>
-<br>
-<div class="container">
-	<div class="row">
-		<div class="col-md-3"></div>
-		<div class="col-md-6 card border-secondary">
-			<div class="card-header">Please enter your credentials to continue</div>
-		  	<div class="card-body text-secondary">
-		    	<form method="post" action="Login">
-		    		<div class="form-group">
-		    			<div style="color: #FF0000;">${errorMessage}</div>
-		  			</div>
-		  			<div class="form-group">
-		    			<input type="text" class="form-control" name="username" placeholder="Username">
-		  			</div>
-		  			<div class="form-group">
-		    			<input type="password" class="form-control" name="password" placeholder="Password">
-		  			</div>
-		  			<button type="submit" class="btn btn-primary">Submit</button>
-				</form>
-		  	</div>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="http://localhost:8080/mycourses/Login">MyCourses</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+			<div class="navbar-nav mr-auto"></div>
+			<div class="navbar-nav ml-auto"></div>
 		</div>
-		<div class="col-md-3"></div>
+	</nav>
+	<br>
+	<div class="container">
+		<div class="row">
+			<div class="col-md-3"></div>
+			<div class="col-md-6">
+				<div class="card">
+					<div class="card-header">Please enter your credentials to
+						continue</div>
+					<div class="card-body">
+						<form method="post" action="Login">
+							<div class="form-group">
+								<div style="color: #FF0000;">${errorMessage}</div>
+							</div>
+							<div class="form-group">
+								<input type="text" class="form-control" name="username"
+									placeholder="Username">
+							</div>
+							<div class="form-group">
+								<input type="password" class="form-control" name="password"
+									placeholder="Password">
+							</div>
+							<button type="submit" class="btn btn-primary">Submit</button>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="col-md-3"></div>
+		</div>
 	</div>
-</div>
 
 
 </body>
